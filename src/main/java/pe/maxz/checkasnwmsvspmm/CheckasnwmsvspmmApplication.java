@@ -38,14 +38,18 @@ public class CheckasnwmsvspmmApplication implements CommandLineRunner{
 		var dateTo =getLocaldatefromString(args[1]);
 		log.info("Start from {} to {}", dateFrom, dateTo);
 		//Check Facilities by user
-		wmsRepository.checkFaccilitiesByUser();
+		var facilitiesDiff = wmsRepository.checkFaccilitiesByUser();
+		log.info("Diff facilities: qty {}", facilitiesDiff.size());
+
+		fileOutput.writeFacilities("facilitiesDiff.txt", facilitiesDiff);
 		dateFrom.datesUntil(dateTo.plusDays(1)).forEach(dt->{
 
 			try {
 				var asns = wmsRepository.getAsns(dt);
-				fileOutput.write("dataasnfull", asns, dt);
+				fileOutput.writeAsn("dataasnfull", asns, dt);
 				var diffs = pmmRepository.getDiffs(asns);
-				log.info("Date: {}, Asns: {}, diffs {} {}", dt, asns.size(), diffs.size(), diffs);					
+				fileOutput.writeAsn("dataasndiff", diffs, dt);
+				log.info("Date: {}, Asns: {}, diffs {}", dt, asns.size(), diffs.size());					
 			} catch (HttpClientErrorException e) {
 				if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)){
 					log.info("Date: {}, Asns: {}",dt, 0);					

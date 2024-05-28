@@ -62,7 +62,7 @@ public class WmsRepository {
         return result;
     }
 
-    public void checkFaccilitiesByUser(){
+    public List<Facility> checkFaccilitiesByUser(){
         int userId = getUserId();
         log.info("User {} -> Id: {}", username, userId);
         var facilities = getAllFacilities();
@@ -73,15 +73,8 @@ public class WmsRepository {
         var facDiff = new ArrayList<Facility>();
         facDiff.addAll(facilities);
         facDiff.removeAll(faccilitiesByUser);
-        log.info("Diff: qty {}, {}", facDiff.size(), facDiff);
-
-        //faccilitiesByUser.removeAll(facilities);
-        //log.info("Diff User: qty {}, {}", faccilitiesByUser.size(), faccilitiesByUser);
-        //AtomicInteger atomicInteger = new AtomicInteger(0);
-        
-        //facilities.forEach(  (t)->{
-        //    log.info("Code {}/{}: {}", atomicInteger.getAndIncrement(),facilities.size(), t.code());
-        //});
+        log.debug("Diff: qty {}, {}", facDiff.size(), facDiff);
+        return facDiff;
     }
 
     @SuppressWarnings("null")
@@ -119,7 +112,7 @@ public class WmsRepository {
                 + "/entity/facility" 
                 + "?values_list={0}&page_size={1}&page={2}&wms_managed_flg={3}",
                 "code,id",
-                1200,
+                pageSize,
                 page,
                 true)
             .header("Authorization", getAuthHeader(username, password))
@@ -150,7 +143,7 @@ public class WmsRepository {
                 + "/entity/user_facility" 
                 + "?cw_user_id={0}&page_size={1}&page={2}",
                 userId,
-                1250,
+                pageSize,
                 page)
             .header("Authorization", getAuthHeader(username, password))
             .retrieve()
