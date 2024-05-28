@@ -17,7 +17,7 @@ import pe.maxz.checkasnwmsvspmm.dto.Asn;
 public class PmmRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    public List<Asn> getDiffs(List<Asn> asnsIn){
+    public List<Asn> getDiffs(List<Asn> asnsIn) throws Exception{
         List<Asn> diffs = new ArrayList<Asn>();
         String query ="";
 
@@ -47,6 +47,7 @@ public class PmmRepository {
             }
         } catch (Exception e) {
             log.error(e);
+            throw e;
         }
         return diffs;
     }

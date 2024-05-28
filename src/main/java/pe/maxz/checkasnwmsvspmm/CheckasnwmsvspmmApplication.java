@@ -36,14 +36,14 @@ public class CheckasnwmsvspmmApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		var dateFrom = getLocaldatefromString(args[0]);
 		var dateTo =getLocaldatefromString(args[1]);
+
 		log.info("Start from {} to {}", dateFrom, dateTo);
 		//Check Facilities by user
 		var facilitiesDiff = wmsRepository.checkFaccilitiesByUser();
 		log.info("Diff facilities: qty {}", facilitiesDiff.size());
-
+		// Print diff facilties in file 
 		fileOutput.writeFacilities("facilitiesDiff.txt", facilitiesDiff);
 		dateFrom.datesUntil(dateTo.plusDays(1)).forEach(dt->{
-
 			try {
 				var asns = wmsRepository.getAsns(dt);
 				fileOutput.writeAsn("dataasnfull", asns, dt);
@@ -69,5 +69,4 @@ public class CheckasnwmsvspmmApplication implements CommandLineRunner{
 		log.debug("year {} month {} day {}", year,month,day);		
 		return LocalDate.of(year,month,day);
 	}
-
 }

@@ -18,18 +18,21 @@ public class FileOutput {
     private String print;
     public void writeAsn(String file, List<Asn> asns, LocalDate dt) throws IOException{
         if (!print.equalsIgnoreCase("T")) return;
-        FileWriter fileWriter = new FileWriter("out/" + file + "_" + dt.toString().replaceAll("-", "") +".txt");
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        asns.forEach(t->{
-            printWriter.println(t.facility_id__code() + ","+ t.shipment_nbr());
-        });
-        printWriter.close();
-        fileWriter.close();
+        try (
+            FileWriter fileWriter = new FileWriter("out/" + file + "_" + dt.toString().replaceAll("-", "") +".txt");
+            PrintWriter printWriter = new PrintWriter(fileWriter);    
+        ) {
+            asns.forEach(t->{
+                printWriter.println(t.facility_id__code() + ","+ t.shipment_nbr());
+            });                
+        } catch (Exception e) {
+            throw e;
+        }
     } 
     public void writeFacilities(String file, List<Facility> facilities) throws IOException{
         if (!print.equalsIgnoreCase("T")) return;
         try (
-            FileWriter fileWriter = new FileWriter("out/" + file + ".txt");
+            FileWriter fileWriter = new FileWriter("out/" + file );
             PrintWriter printWriter = new PrintWriter(fileWriter);    
         ) {
             facilities.forEach(t->{
@@ -39,5 +42,4 @@ public class FileOutput {
             throw e;
         }
     } 
-
 }
