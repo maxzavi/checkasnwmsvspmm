@@ -73,6 +73,17 @@ public class WmsRepository {
         var facDiff = new ArrayList<Facility>();
         facDiff.addAll(facilities);
         facDiff.removeAll(faccilitiesByUser);
+        //Remove alphanumeric facilities
+        var facTemp = new ArrayList<Facility>();
+        facDiff.forEach(t->{
+            try {
+                Integer.parseInt(t.code());                
+            } catch (NumberFormatException e) {
+                facTemp.add(t);
+            }
+        });
+        facDiff.removeAll(facTemp);
+
         log.debug("Diff: qty {}, {}", facDiff.size(), facDiff);
         return facDiff;
     }
