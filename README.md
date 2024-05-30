@@ -7,14 +7,14 @@ spring:
   application:
     name: checkasnwmsvspmm
   datasource:
-    url: jdbc:oracle:thin:@10.20.11.20:1550:spt01
-    username: sinterface
+    url: jdbc:oracle:thin:@IP:port:sid
+    username: ****
     password: ******    
 wms:
   api: 
-    uribase: https://a15.wms.ocs.oraclecloud.com/spsa/wms/lgfapi/v10
+    uribase: https://xxxxxxxx/wms/lgfapi/v10
     pagesize: 1250
-    username: mzavaleta
+    username: *****
     password: ********
 report:
   print: T
